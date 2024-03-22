@@ -14,7 +14,7 @@ export class CreateUserDto {
   password: string;
 
   @ApiProperty()
-  @IsEnum([Gender.Male, Gender.Female])
+  @IsEnum([Gender.Male, Gender.Female, Gender.Other])
   @IsNotEmpty()
   gender: Gender;
 
@@ -26,4 +26,8 @@ export class CreateUserDto {
   @ApiProperty()
   @IsOptional()
   roles?: string[];
+
+  @ApiProperty()
+  @IsOptional()
+  provider?: string;
 }

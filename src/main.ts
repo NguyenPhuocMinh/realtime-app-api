@@ -7,13 +7,14 @@ import cookieParser from 'cookie-parser';
 // App module
 import { AppModule } from './app.module';
 // configs
-import { APP_PORT } from './configs';
+import { APP_PORT, APP_CLIENT_URL } from './configs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // configs
   const configs = app.get(ConfigService);
   const appPort = configs.get<string>(APP_PORT);
+  const appClientUrl = configs.get<string>(APP_CLIENT_URL);
 
   // prefix
   app.setGlobalPrefix('api');
@@ -22,7 +23,7 @@ async function bootstrap() {
   // validation pipe
   app.useGlobalPipes(new ValidationPipe());
   // core
-  app.enableCors();
+  app.enableCors({ origin: [appClientUrl], credentials: true });
   // documents
   const options = new DocumentBuilder()
     .setTitle('Rest Api ChatApp')

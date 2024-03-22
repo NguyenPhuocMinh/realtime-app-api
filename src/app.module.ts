@@ -6,8 +6,6 @@ import { AppService } from './app.service';
 
 // core
 import { CoreModule } from './core/core.module';
-// socket
-import { SocketModule } from './socket/socket.module';
 // modules
 import { AuthModule, UsersModule, MessagesModule } from './modules';
 
@@ -17,7 +15,6 @@ import { AuthModule, UsersModule, MessagesModule } from './modules';
       isGlobal: true,
     }),
     CoreModule,
-    SocketModule,
     AuthModule,
     UsersModule,
     MessagesModule,

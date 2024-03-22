@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
+import { SignInProviderDto } from './dto/sign-in-provider.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,6 +38,15 @@ export class AuthController {
   @ApiBearerAuth()
   signOut(@Res({ passthrough: true }) response: Response) {
     return this.authService.signOut(response);
+  }
+
+  @PublicDecorator()
+  @Post('login/provider')
+  signInProvider(
+    @Body() signInProviderDto: SignInProviderDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.signInProvider(signInProviderDto, response);
   }
 
   @RolesDecorator(Role.Admin, Role.User)

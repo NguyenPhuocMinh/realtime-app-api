@@ -37,6 +37,7 @@ export class UsersService {
       gender: 1,
       avatar: 1,
       roles: 1,
+      provider: 1,
     };
 
     const user = await this.userModel.findOne(filter, projection);
