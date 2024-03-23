@@ -7,8 +7,6 @@ import {
   Request,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
 import { isEmpty } from 'lodash';
 
 import { UsersService } from '../users/users.service';
@@ -20,15 +18,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { transformAuth } from './transform';
 
 import { Gender, Role, Provider } from '../../enums';
-import {
-  hashPass,
-  comparePass,
-  setAuthorizationCookie,
-  clearAuthorizationCookie,
-  generateString,
-} from '../../common/utils';
-
-import { APP_ENV } from '../../configs';
+import { hashPass, comparePass, generateString } from '../../common/utils';
 
 @Injectable()
 export class AuthService {
@@ -37,12 +27,9 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
-    private configService: ConfigService,
   ) {}
 
-  private readonly appEnv = this.configService.get<string>(APP_ENV);
-
-  async signUp(signUpDto: SignUpDto, response: Response) {
+  async signUp(signUpDto: SignUpDto) {
     try {
       this.logger.debug('[START] SignUp has been start...');
 
@@ -82,11 +69,10 @@ export class AuthService {
 
       const accessToken = await this.jwtService.signAsync(payload);
 
-      setAuthorizationCookie(response, { accessToken, appEnv: this.appEnv });
-
       this.logger.debug('[END] SignUp has been end...');
       return {
         data: transformAuth(data),
+        token: accessToken,
       };
     } catch (error) {
       this.logger.error('[END] SignUp has been error...', error.message);
@@ -94,7 +80,7 @@ export class AuthService {
     }
   }
 
-  async signIn(signInDto: SignInDto, response: Response) {
+  async signIn(signInDto: SignInDto) {
     try {
       this.logger.debug('[START] SignIn has been start...');
 
@@ -127,11 +113,10 @@ export class AuthService {
 
       const accessToken = await this.jwtService.signAsync(payload);
 
-      setAuthorizationCookie(response, { accessToken, appEnv: this.appEnv });
-
       this.logger.debug('[END] SignIn has been end...');
       return {
         data: transformAuth(user),
+        token: accessToken,
       };
     } catch (error) {
       this.logger.error('[END] SignIn has been error...', error.message);
@@ -139,11 +124,9 @@ export class AuthService {
     }
   }
 
-  async signOut(response: Response) {
+  async signOut() {
     try {
       this.logger.debug('[START] SignOut has been start...');
-
-      clearAuthorizationCookie(response);
 
       this.logger.debug('[END] SignOut has been end...');
 
@@ -180,10 +163,7 @@ export class AuthService {
     }
   }
 
-  async signInProvider(
-    signInProviderDto: SignInProviderDto,
-    response: Response,
-  ) {
+  async signInProvider(signInProviderDto: SignInProviderDto) {
     try {
       this.logger.debug('[START] SignInProvider has been start...');
 
@@ -216,8 +196,6 @@ export class AuthService {
       };
 
       const accessToken = await this.jwtService.signAsync(payload);
-
-      // setAuthorizationCookie(response, { accessToken, appEnv: this.appEnv });
 
       this.logger.debug('[END] SignInProvider has been end...');
       return {

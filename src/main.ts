@@ -23,7 +23,7 @@ async function bootstrap() {
   // validation pipe
   app.useGlobalPipes(new ValidationPipe());
   // core
-  app.enableCors({ origin: [appClientUrl], credentials: true });
+  app.enableCors({ origin: [appClientUrl] });
   // documents
   const options = new DocumentBuilder()
     .setTitle('Rest Api ChatApp')

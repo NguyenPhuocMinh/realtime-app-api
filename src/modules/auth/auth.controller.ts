@@ -1,6 +1,6 @@
-import { Req, Res, Body, Controller, Get, Post } from '@nestjs/common';
+import { Req, Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Response, Request } from 'express';
+import { Request } from 'express';
 
 import { Role } from '../../enums';
 import { PublicDecorator, RolesDecorator } from '../../common/decorators';
@@ -18,35 +18,26 @@ export class AuthController {
 
   @PublicDecorator()
   @Post('register')
-  signUp(
-    @Body() signUpDto: SignUpDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.signUp(signUpDto, response);
+  signUp(@Body() signUpDto: SignUpDto) {
+    return this.authService.signUp(signUpDto);
   }
 
   @PublicDecorator()
   @Post('login')
-  signIn(
-    @Body() signInDto: SignInDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.signIn(signInDto, response);
+  signIn(@Body() signInDto: SignInDto) {
+    return this.authService.signIn(signInDto);
   }
 
   @Post('logout')
   @ApiBearerAuth()
-  signOut(@Res({ passthrough: true }) response: Response) {
-    return this.authService.signOut(response);
+  signOut() {
+    return this.authService.signOut();
   }
 
   @PublicDecorator()
   @Post('login/provider')
-  signInProvider(
-    @Body() signInProviderDto: SignInProviderDto,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.signInProvider(signInProviderDto, response);
+  signInProvider(@Body() signInProviderDto: SignInProviderDto) {
+    return this.authService.signInProvider(signInProviderDto);
   }
 
   @RolesDecorator(Role.Admin, Role.User)
