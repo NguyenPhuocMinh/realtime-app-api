@@ -180,7 +180,10 @@ export class AuthService {
     }
   }
 
-  async signInProvider(signInProviderDto: SignInProviderDto, response: Response) {
+  async signInProvider(
+    signInProviderDto: SignInProviderDto,
+    response: Response,
+  ) {
     try {
       this.logger.debug('[START] SignInProvider has been start...');
 
@@ -214,14 +217,18 @@ export class AuthService {
 
       const accessToken = await this.jwtService.signAsync(payload);
 
-      setAuthorizationCookie(response, { accessToken, appEnv: this.appEnv });
+      // setAuthorizationCookie(response, { accessToken, appEnv: this.appEnv });
 
       this.logger.debug('[END] SignInProvider has been end...');
       return {
         data: transformAuth(user),
+        token: accessToken,
       };
     } catch (error) {
-      this.logger.error('[END] SignInProvider has been error...', error.message);
+      this.logger.error(
+        '[END] SignInProvider has been error...',
+        error.message,
+      );
       throw new InternalServerErrorException(error.message);
     }
   }
