@@ -64,6 +64,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromCookie(request: Request): string | undefined {
+    console.log("🚀 ~ AuthGuard ~ extractTokenFromCookie ~ request:", request)
     const token = request.cookies[AUTHORIZATION_KEY];
     return token;
   }
