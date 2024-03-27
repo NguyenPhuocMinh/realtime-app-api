@@ -93,7 +93,7 @@ export class AuthService {
        */
       if (isEmpty(user)) {
         this.logger.error('User Not Found...');
-        throw new UnauthorizedException('User Not Found');
+        throw new BadRequestException('User Not Found');
       }
 
       /**
